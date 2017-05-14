@@ -12,7 +12,10 @@ def SendMeme(message):
     if message.text == "/donat":
         bot.reply_to(message, "Here - 4817 7600 1285 8563")
     if message.text == "/meme":
-        bot.send_photo(message.chat.id, vkMemes.GetMeme())
+        try:
+            bot.send_photo(message.chat.id, vkMemes.GetMeme())
+        except:
+            bot.reply_to(message, "Too many memes. Repeat /meme ")
 
 if __name__ == '__main__':
     bot.polling(none_stop=True)
