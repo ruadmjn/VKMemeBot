@@ -1,9 +1,7 @@
 import random
-
 import time
 import vk
 from config import config
-import threading
 
 class vkMemes():
     picList = []
