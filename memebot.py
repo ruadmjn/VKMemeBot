@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import time
+from telebot import types
 from config import config
 import telebot
 from lib.core import vkMemes
@@ -8,17 +9,24 @@ bot = telebot.TeleBot(config.tg_token)
 @bot.message_handler(commands=["meme", "start", "donat"])
 def SendMeme(message):
     try:
+        keyboard = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
+        button_meme = types.KeyboardButton(text="/meme")
+        button_donat = types.KeyboardButton(text="/donat")
+        keyboard.add(button_meme, button_donat)
         if "/start" in message.text:
-            bot.reply_to(message, "Use /donat to support my future")
-            bot.reply_to(message, "Use /meme to orat do gor")
-        if "/donat" in message.text:
-            bot.reply_to(message, "Here - 4817 7600 1285 8563")
-        if "/meme" in message.text:
-            time.sleep(1)
-            bot.send_photo(message.chat.id, vkMemes.GetMeme())
+            bot.reply_to(message, "Use /donat to support my future", reply_markup=keyboard)
+            bot.reply_to(message, "Use /meme to orat do gor", reply_markup=keyboard)
+        if "/donat" in message.text or "Помочь боту" in message.text:
+            bot.reply_to(message, "Here - 4817 7600 1285 8563", reply_markup=keyboard)
+        if "/meme" in message.text or "Получить мемас" in message.text:
+            bot.send_photo(message.chat.id, vkMemes.GetMeme(), reply_markup=keyboard)
     except:
         bot.reply_to(message, "Something went wrong. Repeat /meme ")
-        time.sleep(2)
+        config.tries -= 1
+        if config.tries > 0:
+            time.sleep(1)
+        else:
+            time.sleep(6)
         SendMeme(message)
 
 if __name__ == '__main__':

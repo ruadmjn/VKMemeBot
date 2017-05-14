@@ -1,8 +1,11 @@
 import random
+
+import time
 import vk
 from config import config
+import threading
 
-class vkMemes:
+class vkMemes():
     picList = []
 
     @classmethod
@@ -19,9 +22,10 @@ class vkMemes:
                     if type(post) == type({}):
                         if post["attachment"]["type"] == "photo" and post["likes"]["count"] > 4000:
                             self.picList.append(post["attachment"]["photo"]["src_big"])
-        except Exception as ex:
-            pass
-        if len(self.picList) == 0:
-            return "Something went wrong. Repeat /meme"
-        else:
             return self.picList[random.randint(0, len(self.picList)-1)]
+        except Exception as ex:
+            if len(self.picList) == 0:
+                time.sleep(1.5)
+                self.GetMeme()
+            else:
+                return self.picList[random.randint(0, len(self.picList)-1)]
