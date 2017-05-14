@@ -8,12 +8,12 @@ bot = telebot.TeleBot(config.tg_token)
 @bot.message_handler(commands=["meme", "start", "donat"])
 def SendMeme(message):
     try:
-        if message.text == "/start":
+        if "/start" in message.text:
             bot.reply_to(message, "Use /donat to support my future")
             bot.reply_to(message, "Use /meme to orat do gor")
-        if message.text == "/donat":
+        if "/donat" in message.text:
             bot.reply_to(message, "Here - 4817 7600 1285 8563")
-        if message.text == "/meme":
+        if "/meme" in message.text:
             time.sleep(1)
             bot.send_photo(message.chat.id, vkMemes.GetMeme())
     except:
