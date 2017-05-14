@@ -11,7 +11,7 @@ class vkMemes():
         session = vk.Session(config.vk_secret)
         vkapi = vk.API(session=session)
         if len(self.picList) > 3000:
-            self.picList.clear()
+            self.picList = []
         try:
             for memePage in range(0, 2):
                 offset = memePage * 100

@@ -10,8 +10,8 @@ bot = telebot.TeleBot(config.tg_token)
 def SendMeme(message):
     try:
         keyboard = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
-        button_meme = types.KeyboardButton(text="meme")
-        button_donat = types.KeyboardButton(text="donat")
+        button_meme = types.KeyboardButton(text="/meme")
+        button_donat = types.KeyboardButton(text="/donat")
         keyboard.add(button_meme, button_donat)
         if "start" in message.text:
             bot.reply_to(message, "Use /donat to support my future", reply_markup=keyboard)
