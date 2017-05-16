@@ -8,6 +8,7 @@ from lib.groups import groups
 class vkMemes():
     picList = []
     textList = []
+    postList = []
     wasException = False
 
     @classmethod
@@ -19,7 +20,7 @@ class vkMemes():
         vkapi = vk.API(session=session)
         try:
             if group["type"] == "photo":
-                if len(self.picList) < 450:
+                if len(self.picList) < 250:
                     for memePage in range(0, 5):
                         offset = memePage * 100
                         posts = vkapi.wall.get(owner_id=group["owner_id"], domain=group["domain"], filter="owner",
@@ -33,7 +34,7 @@ class vkMemes():
                 return {"photo": self.picList[random.randint(0, len(self.picList) - 1)]}
 
             if group["type"] == "text":
-                if len(self.textList) < 450:
+                if len(self.textList) < 250:
                     for memePage in range(0, 5):
                         offset = memePage * 100
                         posts = vkapi.wall.get(owner_id=group["owner_id"], domain=group["domain"], filter="owner",
@@ -43,6 +44,18 @@ class vkMemes():
                                 self.textList.append(post["text"])
                     return {"text": self.textList[random.randint(0, len(self.textList) - 1)]}
                 return {"text": self.textList[random.randint(0, len(self.textList) - 1)]}
+
+            if group["type"] == "post":
+                if len(self.postList) < 250:
+                    for memePage in range(0, 5):
+                        offset = memePage * 100
+                        posts = vkapi.wall.get(owner_id=group["owner_id"], domain=group["domain"], filter="owner",
+                                               version="5.64", count=100, offset=offset)
+                        for post in posts:
+                            if type(post) == type({}) and post["text"] != '':
+                                self.postList.append(post["text"])
+                    return {"text": self.postList[random.randint(0, len(self.postList) - 1)]}
+                return {"text": self.postList[random.randint(0, len(self.postList) - 1)]}
         except Exception as ex:
             self.wasException = True
             if group["type"] == "photo":
@@ -59,7 +72,7 @@ class vkMemes():
                     return {"text": self.textList[random.randint(0, len(self.textList) - 1)]}
         finally:
             if self.wasException == False:
-                if len(self.picList) >= 450:
+                if len(self.picList) >= 250:
                     self.picList = []
-                if len(self.textList) >= 450:
+                if len(self.textList) >= 250:
                     self.textList = []
