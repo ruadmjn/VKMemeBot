@@ -13,5 +13,6 @@ class groups:
         ],
         "gif": [
             {"owner_id": "-39488246", "domain": "vk.com/gif_fak", "likes": "200", "type": "gif"},
+            {"owner_id": "-65047210", "domain": "vk.com/fun.gifs", "likes": "200", "type": "gif"},
         ]
     }
