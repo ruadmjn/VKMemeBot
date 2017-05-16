@@ -19,10 +19,10 @@ def ChooseCategory(message):
         bot.reply_to(message, "back", reply_markup=keyboard)
 
 
-@bot.message_handler(commands=["start", "donat", "category", "amoral", "story"])
+@bot.message_handler(commands=["start", "donat", "category", "amoral", "story", "gif"])
 def SendMeme(message):
     category = "amoral"
-    categoryKeyboard = types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
+    categoryKeyboard = types.ReplyKeyboardMarkup(row_width=3, resize_keyboard=True)
     keyboard = types.ReplyKeyboardMarkup(row_width=3, resize_keyboard=True)
 
     button_category = types.KeyboardButton(text="/category")
@@ -31,30 +31,38 @@ def SendMeme(message):
 
     button_category_amoral = types.KeyboardButton(text="/amoral")
     button_category_story = types.KeyboardButton(text="/story")
+    button_category_gif = types.KeyboardButton(text="/gif")
     button_category_back = types.KeyboardButton(text="/back")
-    categoryKeyboard.add(button_category_amoral, button_category_story, button_category_back)
+    categoryKeyboard.add(button_category_amoral, button_category_story, button_category_gif, button_category_back)
     try:
         if "amoral" in message.text:
             category = "amoral"
         if "story" in message.text:
             category = "story"
+        if "gif" in message.text:
+            category = "gif"
 
         if "start" in message.text:
-            bot.reply_to(message, "Use /donat to support my future", reply_markup=keyboard)
-            bot.reply_to(message, "Use /meme to orat do gor", reply_markup=keyboard)
+            bot.send_message(message.chat.id, "Use /donat to support my future", reply_markup=keyboard)
+            bot.send_message(message.chat.id, "Select /category and ori do gor", reply_markup=keyboard)
         if "donat" in message.text:
             bot.reply_to(message, "Here - 4817 7600 1285 8563", reply_markup=keyboard)
-        if "amoral" in message.text or "story" in message.text:
+        if "amoral" in message.text or "story" in message.text or "gif" in message.text:
             randomPost = vkMemes.GetMeme(category)
+            if randomPost is None:
+                time.sleep(2)
+                SendMeme(message)
             if "photo" in randomPost:
                 bot.send_photo(message.chat.id, randomPost["photo"], reply_markup=categoryKeyboard)
             if "text" in randomPost:
-                bot.reply_to(message, str(randomPost["text"]).replace('<br>','\n'), reply_markup=categoryKeyboard)
+                bot.send_message(message.chat.id, str(randomPost["text"]).replace('<br>','\n'), reply_markup=categoryKeyboard)
+            if "gif" in randomPost:
+                bot.send_document(message.chat.id, randomPost["gif"], reply_markup=categoryKeyboard)
         if "category" in message.text:
             bot.reply_to(message, "Choose", reply_markup=categoryKeyboard)
     except Exception as ex:
         if "Telegram" in ex.args[0]:
-            bot.reply_to(message, "Too much peoples want memes. Telegram has limits. (We not) Just wait")
+            bot.send_message(message.chat.id, "Too much peoples want memes. Telegram has limits. (We not) Just wait")
         config.tries -= 1
         if config.tries > 0:
             time.sleep(2)

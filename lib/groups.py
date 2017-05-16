@@ -10,5 +10,8 @@ class groups:
         "story": [
             {"owner_id": "-34215577", "domain": "vk.com/overhear", "likes": "1000", "type": "text"},
             {"owner_id": "-31480508", "domain": "vk.com/pikabu", "likes": "4000", "type": "post"},
+        ],
+        "gif": [
+            {"owner_id": "-39488246", "domain": "vk.com/gif_fak", "likes": "200", "type": "gif"},
         ]
     }

@@ -9,6 +9,7 @@ class vkMemes():
     picList = []
     textList = []
     postList = []
+    gifList = []
     wasException = False
 
     @classmethod
@@ -56,6 +57,20 @@ class vkMemes():
                                 self.postList.append(post["text"])
                     return {"text": self.postList[random.randint(0, len(self.postList) - 1)]}
                 return {"text": self.postList[random.randint(0, len(self.postList) - 1)]}
+            if group["type"] == "gif":
+                if len(self.gifList) < 250:
+                    for memePage in range(0, 3):
+                        offset = memePage * 100
+                        posts = vkapi.wall.get(owner_id=group["owner_id"], domain=group["domain"], filter="owner",
+                                               version="5.64", count=100, offset=offset)
+                        for post in posts:
+                            if type(post) == type({}) \
+                                    and "attachment" in post \
+                                    and "doc" in post["attachment"] \
+                                    and "gif" in post["attachment"]["doc"]["ext"]:
+                                self.gifList.append(post["attachment"]["doc"]["url"])
+                    return {"gif": self.gifList[random.randint(0, len(self.gifList) - 1)]}
+                return {"gif": self.gifList[random.randint(0, len(self.gifList) - 1)]}
         except Exception as ex:
             self.wasException = True
             if group["type"] == "photo":
@@ -70,9 +85,25 @@ class vkMemes():
                     self.GetMeme(category, True)
                 else:
                     return {"text": self.textList[random.randint(0, len(self.textList) - 1)]}
+            if group["type"] == "post":
+                if len(self.postList) == 0:
+                    time.sleep(6)
+                    self.GetMeme(category, True)
+                else:
+                    return {"text": self.postList[random.randint(0, len(self.postList) - 1)]}
+            if group["type"] == "gif":
+                if len(self.gifList) == 0:
+                    time.sleep(6)
+                    self.GetMeme(category, True)
+                else:
+                    return {"text": self.gifList[random.randint(0, len(self.gifList) - 1)]}
         finally:
             if self.wasException == False:
                 if len(self.picList) >= 250:
                     self.picList = []
                 if len(self.textList) >= 250:
                     self.textList = []
+                if len(self.postList) >= 250:
+                    self.postList = []
+                if len(self.gifList) >= 250:
+                    self.gifList = []
