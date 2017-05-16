@@ -66,9 +66,9 @@ class vkMemes():
                         for post in posts:
                             if type(post) == type({}) \
                                     and "attachment" in post \
-                                    and "doc" in post["attachment"] \
-                                    and "gif" in post["attachment"]["doc"]["ext"]:
-                                self.gifList.append(post["attachment"]["doc"]["url"])
+                                    and "doc" in post["attachment"]:
+                                self.gifList.append({"doc": post["attachment"]["doc"]["url"],
+                                                     "caption": post["text"]})
                     return {"gif": self.gifList[random.randint(0, len(self.gifList) - 1)]}
                 return {"gif": self.gifList[random.randint(0, len(self.gifList) - 1)]}
         except Exception as ex:

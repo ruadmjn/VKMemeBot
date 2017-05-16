@@ -6,7 +6,7 @@ import telebot
 from lib.core import vkMemes
 from lib.groups import groups
 
-bot = telebot.TeleBot(config.tg_token)
+bot = telebot.AsyncTeleBot(config.tg_token)
 
 
 @bot.message_handler(commands=["back"])
@@ -57,7 +57,10 @@ def SendMeme(message):
             if "text" in randomPost:
                 bot.send_message(message.chat.id, str(randomPost["text"]).replace('<br>','\n'), reply_markup=categoryKeyboard)
             if "gif" in randomPost:
-                bot.send_document(message.chat.id, randomPost["gif"], reply_markup=categoryKeyboard)
+                bot.send_document(message.chat.id, randomPost["gif"]["doc"],
+                                  caption=str(randomPost["gif"]["caption"]).replace('<br>','\n'),
+                                  reply_markup=categoryKeyboard,
+                                  )
         if "category" in message.text:
             bot.reply_to(message, "Choose", reply_markup=categoryKeyboard)
     except Exception as ex:
