@@ -1,5 +1,7 @@
 # How to run as service
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/226f763394f84f399fca67434af819e8)](https://www.codacy.com/app/ruadmjn/VKMemeBot?utm_source=github.com&utm_medium=referral&utm_content=ruadmjn/VKMemeBot&utm_campaign=badger)
+
 - nano /lib/systemd/system/memebot.service
 
 [Unit]
